@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.gestionrpgmaven.Modelo;
 
-/**
- *
- * @author Servidor
- */
 public class Personaje {
 
     private String nombre;
@@ -15,11 +7,16 @@ public class Personaje {
     private int nivel;
     private int vida;
 
+    // Constructor usado para crear personajes directamente
     public Personaje(String nombre, String clase, int nivel, int vida) {
         this.nombre = nombre;
         this.clase = clase;
         this.nivel = nivel;
         this.vida = vida;
+    }
+
+    // Constructor vacío necesario para recibir JSON desde Javalin
+    public Personaje() {
     }
 
     public String getNombre() {
