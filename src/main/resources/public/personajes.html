@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Personajes</title>
+</head>
+
+<body>
+
+    <h1>Lista de Personajes</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Clase</th>
+                <th>Nivel</th>
+                <th>Vida</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabla-personajes">
+        </tbody>
+    </table>
+
+
+    <h2>Crear nuevo personaje</h2>
+
+    <form id="form-personaje">
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <br><br>
+
+        <label for="clase">Clase:</label>
+        <input type="text" id="clase" name="clase" required>
+        <br><br>
+
+        <label for="nivel">Nivel:</label>
+        <input type="number" id="nivel" name="nivel" required>
+        <br><br>
+
+        <label for="vida">Vida:</label>
+        <input type="number" id="vida" name="vida" required>
+        <br><br>
+
+        <button type="submit">Crear personaje</button>
+
+    </form>
+
+
+    <script>
+
+        // Obtener y mostrar los personajes
+        function cargarPersonajes() {
+
+            fetch('/personajes')
+                .then(response => response.json())
+                .then(personajes => {
+
+                    const tabla = document.getElementById('tabla-personajes');
+
+                    tabla.innerHTML = '';
+
+                    personajes.forEach(personaje => {
+
+                        const fila = document.createElement('tr');
+
+                        fila.innerHTML = `
+                            <td>${personaje.nombre}</td>
+                            <td>${personaje.clase}</td>
+                            <td>${personaje.nivel}</td>
+                            <td>${personaje.vida}</td>
+                        `;
+
+                        tabla.appendChild(fila);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener los personajes:', error);
+                });
+        }
+
+
+        // Crear un nuevo personaje
+        document.getElementById('form-personaje').addEventListener('submit', function(event) {
+
+            event.preventDefault();
+
+            const personaje = {
+                nombre: document.getElementById('nombre').value,
+                clase: document.getElementById('clase').value,
+                nivel: parseInt(document.getElementById('nivel').value),
+                vida: parseInt(document.getElementById('vida').value)
+            };
+
+            fetch('/personajes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(personaje)
+            })
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error('No se pudo crear el personaje');
+                }
+
+                return response.json();
+            })
+            .then(personajeCreado => {
+
+                console.log('Personaje creado:', personajeCreado);
+
+                document.getElementById('form-personaje').reset();
+
+                cargarPersonajes();
+            })
+            .catch(error => {
+                console.error('Error al crear el personaje:', error);
+            });
+
+        });
+
+
+        // Cargar personajes al abrir la página
+        cargarPersonajes();
+
+    </script>
+
+</body>
+</html>

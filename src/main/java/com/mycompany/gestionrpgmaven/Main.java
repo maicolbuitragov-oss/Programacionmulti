@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.gestionrpgmaven;
 
 import com.mycompany.gestionrpgmaven.Controlador.PersonajeControlador;
@@ -11,12 +7,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Javalin app = Javalin.create().start(7070);
+        Javalin app = Javalin.create(config -> {
+            config.staticFiles.add("/public");
+        }).start(7077);
 
         app.get("/personajes", PersonajeControlador::obtenerPersonajes);
 
         app.post("/personajes", PersonajeControlador::crearPersonaje);
 
-        System.out.println("Servidor iniciado en http://localhost:7070");
+        System.out.println("Servidor iniciado en http://localhost:7077");
     }
 }
