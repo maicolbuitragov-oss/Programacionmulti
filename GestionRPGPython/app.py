@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from servicio.personaje_servicio import validar_personaje
 
 app = Flask(__name__)
 
@@ -12,21 +13,14 @@ def listar_personajes():
 
 @app.route("/personajes", methods=["POST"])
 def crear_personaje():
-    nombre = request.form["nombre"]
-    clase = request.form["clase"]
-    nivel = request.form["nivel"]
-    vida = request.form["vida"]
+    datos = request.get_json()
 
-    personaje = {
-        "nombre": nombre,
-        "clase": clase,
-        "nivel": nivel,
-        "vida": vida
-    }
+    if not validar_personaje(datos):
+        return {"mensaje": "Datos del personaje no válidos"}, 400
 
-    personajes.append(personaje)
+    personajes.append(datos)
 
-    return render_template("personajes.html", personajes=personajes)
+    return {"mensaje": "Personaje creado correctamente", "personaje": datos}, 201
 
 
 if __name__ == "__main__":
