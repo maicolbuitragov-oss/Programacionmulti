@@ -6,3 +6,4 @@ GestionRPGPython/__pycache__/
 GestionRPGPython/venv/
 GestionRPGPython/.venv/
 *.pyc
+__pycache__/
